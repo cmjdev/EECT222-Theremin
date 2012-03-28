@@ -1,0 +1,14 @@
+Title...: EECT222 Theremin 
+Author..: Christopher Johnson / Henry Smith
+
+Description:
+------------
+This Theremin project is a class requirement for EECT222. The goal is to
+reproduce the effects of a real theremin using photodiodes, potentiometers,
+and the Dragon HCS12 development board.
+
+Disclaimer:
+-----------
+The code included with this program is under no licensing. Feel free to use,
+modify, or redistribute whatever you find with the notion that We are not 
+professional programmers.
