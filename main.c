@@ -45,6 +45,7 @@ void display(unsigned char vol, unsigned char freq) {
   (void)sprintf(buffer,"Frequency = %d", freq);  // implement conversion to freq
   LCDcmd(0xC0,0);
   printString(buffer);
+
 }
 
 /* vupdate scales input and displays the result in a 'vumeter' manor */
@@ -55,6 +56,7 @@ void vupdate(unsigned char x) {
   PORTB = lookup[x/28]; // change when scale is figured
     
 }
+
 void main(void) {
 
   /* Setup code */
@@ -71,7 +73,6 @@ void main(void) {
     }
     
     vupdate(volSense);
-      
   }
 
 }
