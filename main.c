@@ -2,13 +2,15 @@
 #include <mc9s12dp256.h>
 #include <stdio.h>
 
+#define volSense ATD0DR2H
+#define pitchSense ATD0DR3H
+
 void LCDinit(void);
 void delayu(unsigned int usec);
 void LCDcmd(char c, char DATA);
 void printString(char *c);
 
 /* ATDinit initializes onboard ADC chips */
-
 void ATDinit(void) {
   
   ATD0CTL2 |= 0x80;
@@ -21,7 +23,6 @@ void ATDinit(void) {
 }
 
 /* DISPinit configures LED's for vumeter and initializes LCD */
-
 void DISPinit(void) {
   
   DDRB = 0xFF;
@@ -34,7 +35,6 @@ void DISPinit(void) {
 }
 
 /* display formats and prints data to LCD */
-
 void display(unsigned char vol, unsigned char freq) {
 
   static char buffer[32];
@@ -42,13 +42,12 @@ void display(unsigned char vol, unsigned char freq) {
   (void)sprintf(buffer,"Volume = %d",vol);  // duty cycle -> volume %
   LCDcmd(1,0);
   printString(buffer);
-  (void)sprintf(buffer,"Temp = %d", freq);  // implement conversion to freq
+  (void)sprintf(buffer,"Frequency = %d", freq);  // implement conversion to freq
   LCDcmd(0xC0,0);
   printString(buffer);
 }
 
 /* vupdate scales input and displays the result in a 'vumeter' manor */
-	
 void vupdate(unsigned char x) {
 
   const unsigned char lookup[] = {0, 0x01, 0x03, 0x07, 0x0F, 0x1F, 0x3F, 0x7F, 0xFF};
@@ -59,21 +58,19 @@ void vupdate(unsigned char x) {
 void main(void) {
 
   /* Setup code */
- 
   int count = 25000;
   DISPinit();
   ATDinit();
   
-  /* Main loop code */
-  
+  /* Main loop code */  
   for(;;) {
     
     if(!(--count)) {
-      display(ATD0DR2H, ATD0DR3H);
+      display(volSense, pitchSense);
       count = 25000;
     }
     
-    vupdate(ATD0DR2H);
+    vupdate(volSense);
       
   }
 

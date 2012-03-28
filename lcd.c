@@ -2,20 +2,19 @@
 #define ENABLE 0x02
 
 /* delay = 2us *NEED TO OPTIMIZE* */
-
 void delayu(unsigned int usec) {
 
   while (usec--) {
   }
 }
 
-void LCDcmd(char c, char DATA) {  //send cmd to LCD control reg
+/* send cmd to LCD control reg */
+void LCDcmd(char c, char DATA) {  
 
-  char lownib = (0x0f & c) <<2; // shift into bits 2:5 *CLEARS DATASEL REGISTER*)
-  char hinib = (0xf0 & c) >>2;  // shift into bits 2:5 *CLEARS DATASEL REGISTER*)
+  char lownib = (0x0f & c) <<2; // shift into bits 2:5 *CLEARS DATASEL REGISTER*
+  char hinib = (0xf0 & c) >>2;  // shift into bits 2:5 *CLEARS DATASEL REGISTER*
   
   /* send high nibble of data */
-  
   PORTK = hinib;
   PORTK = ENABLE | DATA | hinib;
   PORTK = hinib;
@@ -32,11 +31,11 @@ void LCDcmd(char c, char DATA) {  //send cmd to LCD control reg
 void LCDinit(void) {
 
   const char INITLENGTH = 6;
-  char initseq[] = {0x33,0x32,0x28,0x06,0x0c,0x01}; // 0x0F=cursor on,blink
+  char initseq[] = {0x33,0x32,0x28,0x06,0x0c,0x01};
   char i;
   
-  DDRK = 0xFF;  // enable PORTK as output
-  PORTK = 0x00;  // clear PORTK of data
+  DDRK = 0xFF;
+  PORTK = 0x00;
   
   for (i=0; i<INITLENGTH; i++) {
     LCDcmd(initseq[i], 0);
